@@ -1,14 +1,16 @@
 import 'package:first_flutter/Controlers/homecontroller.dart';
-import 'package:first_flutter/Models/Org/OrgNavigationBar.dart';
+import 'package:first_flutter/Views/Org/OrgNavigationBar.dart';
+import 'package:first_flutter/services/auth_service.dart';
+import 'package:first_flutter/services/auth_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-// import 'package:http/http.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(FormController());
-
-  runApp(const MyApp());
+  AuthStorage.init();
+  await AuthService.instance.login(email: 'un@gmail.com', password: 'un1234');
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      getPages: [GetPage(name: "/home", page: () => Orgnavigationbar())],
+      getPages: [GetPage(name: "/EEEEEEEE", page: () => Orgnavigationbar())],
     );
   }
 }

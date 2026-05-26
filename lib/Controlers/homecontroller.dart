@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 ////////////////////// start class for page Form fore //////////////////////
 class CategoryItem {
   String name;
   RxBool isSelected;
-
-  CategoryItem({required this.name, required this.isSelected});
+  int id;
+  CategoryItem({
+    required this.name,
+    required this.isSelected,
+    required this.id,
+  });
 
   ////////////////////// end class for page Form fore //////////////////////
 }
@@ -77,7 +84,7 @@ class TaskModel {
 
 ///////////////////////////////////////////////////////////////////////////////////
 class VolunteerPageFore {
-  String logo;
+  List<String> logo;
   String name;
   String appliedTime;
   String email;
@@ -124,6 +131,28 @@ class VolunteerPageFore {
   });
 }
 
+class tasks {
+  String title;
+  String date;
+  String timeDelay;
+  String location;
+  String icon;
+  String state;
+  String Organization;
+  String Description;
+
+  tasks({
+    required this.title,
+    required this.date,
+    required this.timeDelay,
+    required this.location,
+    required this.icon,
+    required this.state,
+    required this.Organization,
+    required this.Description,
+  });
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class FormController extends GetxController {
@@ -147,11 +176,31 @@ class FormController extends GetxController {
     super.onClose();
   }
 
+  var isLoading = false.obs;
+  var isLoadingAccess = false.obs;
+  var isLoadingReject = false.obs;
+
   // ************************** Page One **************************
   var month = 'Month'.obs;
   var day = 'Day'.obs;
   var year = 'Year'.obs;
-  late var date = '${month.value} ${day.value}, ${year.value}'.obs;
+  late var date = ''.obs;
+
+  void returnDate(String year, int month, int day) {
+    if (day >= 1 && day < 10) {
+      if (month >= 1 && month < 10) {
+        date.value = '$year-0$month-0$day';
+      } else {
+        date.value = '$year-$month-0$day';
+      }
+    } else {
+      if (month >= 1 && month < 10) {
+        date.value = '$year-0$month-$day';
+      } else {
+        date.value = '$year-$month-$day';
+      }
+    }
+  }
 
   var gender = 'Select gender'.obs;
 
@@ -213,7 +262,6 @@ class FormController extends GetxController {
   // ************************** Page Three **************************
 
   // 🔹 القيم
-
   // 🔹 TextFields
   final education = TextEditingController();
   final languagesThree = TextEditingController();
@@ -221,14 +269,10 @@ class FormController extends GetxController {
   final skillsController = TextEditingController();
 
   // ************************** Page fore **************************
+  var idOrganization = 1.obs;
+
   final List<CategoryItem> categories = [
-    CategoryItem(name: 'Child protection', isSelected: false.obs),
-    CategoryItem(name: 'Education support', isSelected: false.obs),
-    CategoryItem(name: 'Psychosocial support', isSelected: false.obs),
-    CategoryItem(name: 'Health awareness', isSelected: false.obs),
-    CategoryItem(name: 'Distribution & Logistics', isSelected: false.obs),
-    CategoryItem(name: 'Community engagement', isSelected: false.obs),
-    CategoryItem(name: 'Emergency response', isSelected: false.obs),
+    CategoryItem(name: 'Child protection', isSelected: false.obs, id: 1),
   ];
 
   void toggleSelection(int index) {
@@ -260,19 +304,22 @@ class FormController extends GetxController {
     isPolicyCommitted.value = value ?? false;
   }
 
+  // ************************** PIN Number **************************
+  var pinCode = ''.obs;
+
   // ************************** Profile **************************
   var role = "Verified Volunteer".obs;
-  var joinDate = 2023.obs;
+  var joinDate = "".obs;
 
   // Stats
   var tasks = 42.obs;
   var points = 850.obs;
 
   // Skills
-  var skills = ["First Aid", "Logistics", "Languages"].obs;
-
+  var skills = ["First Aid", "Logistics"].obs;
+  var language = ["arabic"].obs;
   // Experience
-  var experiences = ["Emergency Food Drive"].obs;
+  var experiences = "Emergency Food Drive".obs;
 
   var currentIndex = 0.obs;
 
@@ -286,65 +333,44 @@ class FormController extends GetxController {
 
   // اسم المستخدم
   var userName = "Alex Rivera".obs;
+  final ImagePicker picker = ImagePicker();
+  XFile? userImage;
 
   // الإحصائيات
   var failed = 4.obs;
+
   var pending = 6.obs;
   var completed = 24.obs;
-  // الصورة
-  var imageIcon = "".obs;
   // قائمة المهام
-  var tasksthree = [
+  var tasksthreeHome = [
     {
-      "title": "Food Distribution",
-      "date": "Oct 24 10:00 AM",
-      "timeDelay": "2h ",
-      "location": "Central Park Area",
-      "icon": "restaurant",
-      "state": "completed",
-      "Organization": "UNICEF",
-      "Description": "My Description",
-    },
-    {
-      "title": "Medical Sorting",
-      "date": "Dec 2 02:30 PM",
-      "timeDelay": "4h ",
-      "location": "City Hospital",
-      "icon": "medical_services",
-      "state": "pending",
-
-      "Organization": "UNICEF",
-      "Description": "My Description",
-    },
-
-    {
-      "title": "Evening Tutoring",
-      "date": "Jan 10 06:00 PM",
-      "timeDelay": "12h ",
-      "location": "Community Library",
-      "icon": "school",
-      "state": "failed",
-      "Organization": "UNICEF",
-      "Description": "My Description",
-    },
-    {
-      "title": "Food Distribution",
-      "date": "Oct 24 10:00 AM",
-      "timeDelay": "2h ",
-      "location": "Central Park Area",
-      "icon": "restaurant",
-      "state": "completed",
-      "Organization": "UNICEF",
-      "Description": "My Description",
+      'id': 1,
+      'title': 'mission',
+      'location': 'homs',
+      'created_display': '10:57 AM',
+      'icon': 'school',
     },
   ].obs;
 
-  void updateData(int index, String item) {
-    tasksthree[index]['state'] = item;
-    tasksthree.refresh();
+  void updateData(int index, String item, String rejectionReason) {
+    taskInTask[index]['status'] = item;
+    taskInTask[index]['rejection_reason'] = rejectionReason;
+    taskInTask.refresh();
   }
 
   // ************************** All Tasks **************************
+  var taskInTask = [
+    {
+      "id": 3,
+      "title": "Medical Sorting",
+      "status": "completed",
+      "location": "homs",
+      "created_at_display": "May 11, 08:36 PM",
+      "task_description": "Urgent help",
+      "organization_name": "UNICEF",
+    },
+  ].obs;
+
   var currentIndexAllTasks = 0.obs;
   void changePageAllTasks(int index) => currentIndexAllTasks.value = index;
 
@@ -358,8 +384,8 @@ class FormController extends GetxController {
   // ************************** All Org Page One **************************
 
   // ************************** All Org Page two **************************
-
-  final List<Map<String, String>> listallpagetwo = [
+  RxString valID = "".obs;
+  List<Map<String, String>> listallpagetwo = [
     {
       "title": "Ahmad Youssef",
       "id": "R-12345",
@@ -373,33 +399,12 @@ class FormController extends GetxController {
     {
       "title": "Sara Salloum",
       "id": "D-87543",
-      "taskPhoto": "images/my photo",
+      "taskPhoto": "images/my",
       "taskName": "Medical aid",
       'icon': 'medical_services',
       "location": "Damascus",
       "date": "2025/11/10",
       "state": "pending",
-    },
-    {
-      "title": "Ahmad Youssef",
-      "id": "R-12345",
-      "taskPhoto": "images/my photo",
-      "taskName": "Food assistance",
-      'icon': 'restaurant',
-
-      "location": "Homs-Al_waer",
-      "date": "2025/12/10",
-      "state": "approved",
-    },
-    {
-      "title": "Sara Salloum",
-      "id": "D-87543",
-      "taskPhoto": "images/my photo",
-      "taskName": "Medical aid",
-      'icon': 'medical_services',
-      "location": "Damascus",
-      "date": "2025/11/10",
-      "state": "rejected",
     },
   ].obs;
 
@@ -471,9 +476,9 @@ class FormController extends GetxController {
   }
   // ************************** All Org Page fore **************************
 
-  final List<VolunteerPageFore> listallpagefore = [
+  RxList<VolunteerPageFore> listallpagefore = [
     VolunteerPageFore(
-      logo: "medical_services",
+      logo: ["medical_services"],
       name: 'Omar Al-Hassan',
       appliedTime: 'Applied 2 hours ago',
       email: 'omar.hassan@email.com',
@@ -496,7 +501,7 @@ class FormController extends GetxController {
       state: 'pending',
     ),
     VolunteerPageFore(
-      logo: 'emergency',
+      logo: ['emergency'],
       name: 'Ali khador',
       appliedTime: 'Applied 3 hours ago',
       email: 'ali.khador@email.com',

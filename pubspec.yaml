@@ -48,6 +48,9 @@ dependencies:
   string_to_icon: ^1.0.0
   pinput: ^6.0.2
   smart_auth: ^3.2.0
+  dio: ^5.9.2
+  flutter_secure_storage: ^10.0.0
+  image_picker: ^1.2.2
 
 dev_dependencies:
   flutter_launcher_icons: "^0.14.4"
@@ -79,6 +82,7 @@ flutter:
     - images/Good team-cuate 1.png
     - images/Notify-amico 1.png
     - images/Waiting-pana (1) 1.png
+    - images/Team work-bro 1.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
