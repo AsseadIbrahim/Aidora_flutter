@@ -73,7 +73,7 @@ class Successtask extends StatelessWidget {
         const SizedBox(height: 8),
         // نص ثانوي يوضح أنه تم إعلام Alex Rivera
         Text(
-          'The task has been created and ${controller.volunteerName} has been notified.',
+          'The task has been created and ${controller.reportID.value['full_name']} has been notified.',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
         ),

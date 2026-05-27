@@ -20,11 +20,6 @@ class _ProfilePage extends State<ProfilePage> {
   String? imagename;
   XFile? image;
   var bytes;
-  _updateImage() async {
-    final XFile? image = await controller.picker.pickImage(
-      source: ImageSource.gallery,
-    );
-  }
 
   @override
   void initState() {
@@ -96,12 +91,7 @@ class _ProfilePage extends State<ProfilePage> {
         else
           CircleAvatar(
             radius: 40,
-            child: IconButton(
-              onPressed: () {
-                _updateImage();
-              },
-              icon: Icon(Icons.add),
-            ),
+            child: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
           ),
 
         SizedBox(height: 10),

@@ -47,11 +47,11 @@ class DataProfile {
 }
 
 class PageOneClass {
-  int approved;
-  int inProgress;
-  int completed;
-  List<Map<String, String>> requests;
-  List<Map<String, dynamic>> tasks;
+  RxInt approved;
+  RxInt inProgress;
+  RxInt completed;
+  RxList<Map<String, Object>> requests;
+  RxList<Map<String, Object>> tasks;
 
   PageOneClass({
     required this.approved,
@@ -381,8 +381,6 @@ class FormController extends GetxController {
   var orgCurrentIndex = 0.obs;
   void changOrgCurrentIndex(int index) => orgCurrentIndex.value = index;
 
-  // ************************** All Org Page One **************************
-
   // ************************** All Org Page two **************************
   RxString valID = "".obs;
   List<Map<String, String>> listallpagetwo = [
@@ -531,73 +529,73 @@ class FormController extends GetxController {
 
   // ************************** All Org Page One **************************
 
-  var pageOne = [
-    PageOneClass(
-      approved: 45,
-      inProgress: 120,
-      completed: 24,
-      requests: [
-        {
-          'id': 'R-12345',
-          'location': 'Homs, Syria',
-          'date': '10/Dec/2025',
-          'type': 'FOOD',
-          'ID': "1",
-        },
-        {
-          'id': 'D-67840',
-          'location': 'Aleppo, Syria',
-          'date': '12/Nov/2025',
-          'type': 'MEDICAL',
-          'ID': "2",
-        },
-        {
-          'id': 'R-09643',
-          'location': 'Damascus, Syria',
-          'date': '3/Dec/2025',
-          'type': 'SHELTER',
-          'ID': "3",
-        },
-      ],
-      tasks: [
-        {
-          'title': 'Food distribution',
-          'id': '#12',
-          'name': 'Ali A',
-          'Country': 'Homs',
-          'timedelay': '1h ago',
-          'report_reviewed': true,
-          "ID": 1,
-        },
-        {
-          'title': 'Medical aid',
-          'id': '#8',
-          'name': 'Layla L',
-          'Country': 'Aleppo',
-          'timedelay': '4h ago',
-          'report_reviewed': true,
-          "ID": 2,
-        },
-        {
-          'title': 'Aid Package Delivery',
-          'id': 'R-09643',
-          'name': 'Alex S',
-          'Country': 'Damascus',
-          'timedelay': '3h ago',
-          'report_reviewed': false,
-          "ID": 3,
-        },
-      ],
-    ),
-  ].obs;
+  var pageOne = PageOneClass(
+    approved: 45.obs,
+    inProgress: 120.obs,
+    completed: 24.obs,
+    requests: [
+      {
+        'id': 1,
+        'refugee_id': 'R-12345',
+        'location': 'Homs, Syria',
+        'date': '10/Dec/2025',
+        'type': 'FOOD',
+      },
+      {
+        'id': 2,
+        'refugee_id': 'D-67840',
+        'location': 'Aleppo, Syria',
+        'date': '12/Nov/2025',
+        'type': 'MEDICAL',
+      },
+      {
+        'id': 3,
+        'refugee_id': 'R-09643',
+        'location': 'Damascus, Syria',
+        'date': '3/Dec/2025',
+        'type': 'SHELTER',
+      },
+    ].obs,
+    tasks: [
+      {
+        "id": 1,
+        'title': 'Food distribution',
+        'volunteer_id': '#12',
+        'name': 'Ali A',
+        'Country': 'Homs',
+        'timedelay': '1h ago',
+        'report_reviewed': true,
+      },
+      {
+        'id': 2,
+        'title': 'Medical aid',
+        'volunteer_id': '#8',
+        'name': 'Layla L',
+        'Country': 'Aleppo',
+        'timedelay': '4h ago',
+        'report_reviewed': true,
+      },
+      {
+        'id': 3,
+        'title': 'Aid Package Delivery',
+        'volunteer_id': 'R-09643',
+        'name': 'Alex S',
+        'Country': 'Damascus',
+        'timedelay': '3h ago',
+        'report_reviewed': false,
+      },
+    ].obs,
+  );
   // ************************** All Org Page Report **************************
   // بيانات ثابتة (يمكن استبدالها بجلب من API)
-  final String sectionTitle = "Aid Package Delivery";
-  final String dateTime = "Thursday, Oct 24 • 10:00 AM";
-  final String location = "Regional Distribution Hub";
-  final String volunteerName = "Alex Rivera";
-  final String taskDescription =
-      "Responsible for the final mile delivery of essential aid packages to registered families. Ensure all items are accounted for and handle deliveries with care and respect for cultural norms.";
+  var reportID = {
+    "title": "food",
+    "instructions": "this is my description",
+    "location": "damas",
+    "full_name": "ahmad ali",
+    "points": 0,
+    "created_at": "Sunday, May 11•08:36 PM",
+  }.obs;
 
   // النقاط المختارة
   RxInt selectedPoints = 0.obs;

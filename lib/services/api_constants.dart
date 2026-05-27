@@ -10,13 +10,13 @@ class ApiConstants {
     return getPlatformBaseUrl();
   }
 
-  // ── Organizations ─────────────────────────────────────────────────────────
+  // ── Organizations ──────────────────────────────────────────────────────────
   static const String organizationCards = '/api/organizations/cards/';
   static String organizationFilter(String t) => '/api/organizations/filter/$t/';
   static String organizationDetail(int id) => '/api/organizations/$id/';
   static const String organizationServices = '/api/organizations/services/';
 
-  // ── Auth ──────────────────────────────────────────────────────────────────
+  // ── Auth ───────────────────────────────────────────────────────────────────
   static const String login = '/api/auth/login/';
   static const String registerRefugee = '/api/auth/register/refugee/';
   static const String tokenRefresh = '/api/auth/token/refresh/';
@@ -36,11 +36,11 @@ class ApiConstants {
 
   static const String notifications = '/api/auth/notifications/';
 
-  // ── Requests ──────────────────────────────────────────────────────────────
+  // ── Requests ───────────────────────────────────────────────────────────────
   static const String myRequests = '/api/requests/my-requests/';
   static const String requestList = '/api/requests/list/';
 
-  // ── Volunteers ──────────────────────────────────────────────────────────────
+  // ── Volunteers ─────────────────────────────────────────────────────────────
   static const String volunteerPageOne = '/api/auth/volunteer/profile/';
   static const String volunteerPageTwo =
       '/api/auth/volunteer/profile/availability/';
@@ -58,8 +58,11 @@ class ApiConstants {
   static const String home = '/api/requests/volunteer/home/';
   static const String tasks = '/api/requests/volunteer/tasks/';
   static const String taskStatus = '/api/requests/volunteer/tasks/';
-  // ── Organization Page Fore ──────────────────────────────────────────────────────────────
+  // ── Organization Page Fore ─────────────────────────────────────────────────
   static const String orgpagefore = '/api/organizations/applications/';
   static const String orgPageForeUpdateStatus =
       '/api/organizations/applications/';
+  // ── Organization Page One ──────────────────────────────────────────────────
+  static const String orgPageOne = '/api/organizations/dashboard/';
+  static const String orgReport = '/api/organizations/tasks/';
 }

@@ -1,9 +1,34 @@
 import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:first_flutter/Views/Org/OrgNavigationBar.dart';
+import 'package:first_flutter/services/api_constants.dart';
+import 'package:first_flutter/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
-class Report extends StatelessWidget {
-  Report({super.key});
+class Report extends StatefulWidget {
+  const Report({super.key});
+  @override
+  State<StatefulWidget> createState() => _Report();
+}
+
+class _Report extends State<StatefulWidget> {
+  final int id = Get.arguments;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future _init() async {
+    var res = await ApiService.instance.get(
+      "${ApiConstants.orgReport}${id}/report/",
+      requiresAuth: true,
+    );
+    setState(() {
+      controller.reportID.value = Map<String, Object>.from(res.data);
+    });
+  }
 
   // حقن المتحكم
   final FormController controller = Get.find();
@@ -65,7 +90,7 @@ class Report extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          controller.sectionTitle,
+                          controller.reportID.value['title'].toString(),
                           style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
@@ -82,7 +107,8 @@ class Report extends StatelessWidget {
                               Text("Date & Time"),
                               SizedBox(height: 2),
                               Text(
-                                controller.dateTime,
+                                controller.reportID.value['created_at']
+                                    .toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -103,7 +129,8 @@ class Report extends StatelessWidget {
                               Text("Location"),
                               SizedBox(height: 2),
                               Text(
-                                controller.location,
+                                controller.reportID.value['location']
+                                    .toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -124,7 +151,8 @@ class Report extends StatelessWidget {
                               Text("Volunteer"),
                               SizedBox(height: 2),
                               Text(
-                                controller.volunteerName,
+                                controller.reportID.value['full_name']
+                                    .toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -149,7 +177,7 @@ class Report extends StatelessWidget {
 
                         // وصف المهمة
                         Text(
-                          controller.taskDescription,
+                          controller.reportID.value['instructions'].toString(),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade800,
@@ -287,11 +315,26 @@ class Report extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: TextButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "Update Points",
-                                        style: TextStyle(fontSize: 20),
-                                      ),
+                                      onPressed: () async {
+                                        controller.isLoading.value = true;
+                                        await ApiService.instance.patch(
+                                          "${ApiConstants.orgReport}${id}/report/",
+                                          requiresAuth: true,
+                                          body: {
+                                            "points":
+                                                controller.selectedPoints.value,
+                                          },
+                                        );
+                                        controller.isLoading.value = false;
+
+                                        Get.offAll(() => Orgnavigationbar());
+                                      },
+                                      child: controller.isLoading.value
+                                          ? CircularProgressIndicator()
+                                          : Text(
+                                              "Update Points",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
                                     ),
                                   ),
                                   SizedBox(height: 10),

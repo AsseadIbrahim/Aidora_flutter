@@ -3,8 +3,14 @@ import 'package:first_flutter/Views/Org/AssignNewTask/AssignNewTask.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
-class Dataperson extends StatelessWidget {
-  Dataperson({super.key});
+class Dataperson extends StatefulWidget {
+  const Dataperson({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _Dataperson();
+}
+
+class _Dataperson extends State<StatefulWidget> {
   // حقن المتحكم
   final FormController controller = Get.find();
 
