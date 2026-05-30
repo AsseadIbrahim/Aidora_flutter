@@ -3,12 +3,15 @@ import 'package:first_flutter/Views/Org/OrgNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
-class Successtask extends StatelessWidget {
-  Successtask({super.key});
+class Successtask extends StatefulWidget {
+  const Successtask({super.key});
+  @override
+  State<StatefulWidget> createState() => _Successtask();
+}
 
+class _Successtask extends State<StatefulWidget> {
   // حقن المتحكم
   final FormController controller = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -307,7 +307,7 @@ class _Orgone extends State<StatefulWidget> {
               ),
               IconButton(
                 onPressed: () {
-                  Get.to(() => Dataperson());
+                  Get.to(() => Dataperson(), arguments: req['id']);
                 },
                 icon: const Icon(Icons.arrow_forward_ios_rounded),
               ),

@@ -14,6 +14,7 @@ class Pagefore extends StatefulWidget {
 
 class _Pagefore extends State<Pagefore> {
   final FormController controller = Get.find();
+  // ignore: prefer_typing_uninitialized_variables
   var respons;
   @override
   void initState() {

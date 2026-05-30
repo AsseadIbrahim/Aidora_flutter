@@ -1,5 +1,6 @@
 import 'package:first_flutter/Controlers/homecontroller.dart';
 import 'package:first_flutter/Views/Org/AssignNewTask/AssignNewTask.dart';
+import 'package:first_flutter/Views/Org/OrgOne/Report.dart';
 import 'package:first_flutter/services/api_constants.dart';
 import 'package:first_flutter/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,32 @@ class Orgthree extends StatefulWidget {
 
 class _Orgthree extends State<StatefulWidget> {
   final FormController controller = Get.find();
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    var res = await ApiService.instance.get(
+      ApiConstants.orgPageThree,
+      requiresAuth: true,
+    );
+    setState(() {
+      controller.allTasks.value = (res.data['tasks'] as List).map((e) {
+        return TaskModel(
+          id: e['id'].toString(),
+          title: e['title'],
+          location: e['location'],
+          assignee: e['volunteer_full_name'],
+          date: e['date'],
+          status: e['status'],
+          failureReason: e['rejection_reason'],
+        );
+      }).toList();
+      controller.updateSeparateLists();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +118,7 @@ class _Orgthree extends State<StatefulWidget> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.grey.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
@@ -175,6 +203,7 @@ class _Orgthree extends State<StatefulWidget> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     color: _getColorForStatus(task.status)?.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -277,7 +306,9 @@ class _Orgthree extends State<StatefulWidget> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadiusGeometry.circular(10),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => Report(), arguments: int.parse(task.id));
+                      },
                       child: Text(
                         "View Report",
                         style: TextStyle(color: Colors.white),
@@ -290,8 +321,13 @@ class _Orgthree extends State<StatefulWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadiusGeometry.circular(10),
                     ),
-                    onPressed: () {
-                      task.status == "inProgress";
+                    onPressed: () async {
+                      await ApiService.instance.patch(
+                        "${ApiConstants.reAssign}${task.id}/reassign/",
+                        body: {},
+                        requiresAuth: true,
+                      );
+                      _init();
                     },
                     child: Text(
                       "    Reassign Task    ",
@@ -310,7 +346,7 @@ class _Orgthree extends State<StatefulWidget> {
     switch (status) {
       case "completed":
         return Icons.check_circle_outline;
-      case "inProgress":
+      case "pending":
         return Icons.pending_outlined;
       case "failed":
         return Icons.cancel_outlined;
@@ -322,7 +358,7 @@ class _Orgthree extends State<StatefulWidget> {
     switch (status) {
       case "completed":
         return Colors.green;
-      case "inProgress":
+      case "pending":
         return Colors.blue;
       case "failed":
         return Colors.red;

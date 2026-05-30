@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:first_flutter/Controlers/homecontroller.dart';
 import 'package:first_flutter/Views/Org/OrgFore/VolunteerDetailScreen.dart';
 import 'package:first_flutter/services/api_constants.dart';

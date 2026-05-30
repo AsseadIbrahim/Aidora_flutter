@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,6 +23,7 @@ class DataProfile {
   String fullName;
   String id;
   String task;
+  String taskIcon;
   String locationPersonProfile;
   String phoneNumber;
   int totalMembers;
@@ -37,6 +36,7 @@ class DataProfile {
     required this.fullName,
     required this.id,
     required this.task,
+    required this.taskIcon,
     required this.locationPersonProfile,
     required this.phoneNumber,
     required this.totalMembers,
@@ -383,11 +383,10 @@ class FormController extends GetxController {
 
   // ************************** All Org Page two **************************
   RxString valID = "".obs;
-  List<Map<String, String>> listallpagetwo = [
+  RxList<Map<String, String>> listallpagetwo = [
     {
       "title": "Ahmad Youssef",
       "id": "R-12345",
-      "taskPhoto": "images/my photo",
       "taskName": "Food assistance",
       'icon': 'restaurant',
       "location": "Homs-Al_waer",
@@ -397,7 +396,6 @@ class FormController extends GetxController {
     {
       "title": "Sara Salloum",
       "id": "D-87543",
-      "taskPhoto": "images/my",
       "taskName": "Medical aid",
       'icon': 'medical_services',
       "location": "Damascus",
@@ -409,12 +407,12 @@ class FormController extends GetxController {
   // ************************** All Org Page Three **************************
 
   // قوائم منفصلة لكل حالة (للاستدعاء السريع)
-  final completedTasks = <TaskModel>[].obs;
-  final inProgressTasks = <TaskModel>[].obs;
-  final failedTasks = <TaskModel>[].obs;
+  var completedTasks = <TaskModel>[].obs;
+  var inProgressTasks = <TaskModel>[].obs;
+  var failedTasks = <TaskModel>[].obs;
 
   // بيانات تجريبية مطابقة للصورة
-  final allTasks = [
+  var allTasks = [
     TaskModel(
       id: '1',
       title: 'Food Aid Distribution',
@@ -441,35 +439,11 @@ class FormController extends GetxController {
       date: "Oct 19 , 2022",
       status: "inProgress",
     ),
-    TaskModel(
-      id: '2',
-      title: 'Medical Supply Check',
-      location: 'Aleppo - Center',
-      assignee: 'Omar Khalid',
-      date: "Dec 2 , 2025 ",
-      status: "failed",
-      failureReason:
-          "The reason for the mission's failure is that the family was not at the mentioned location.",
-    ),
-    TaskModel(
-      id: '1',
-      title: 'Food Aid Distribution',
-      location: 'Homs - Al-waer',
-      assignee: 'Layla Mostafa',
-      date: "Apr 9 ,2023",
-      status: "completed",
-    ),
-  ];
+  ].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _updateSeparateLists();
-  }
-
-  void _updateSeparateLists() {
+  void updateSeparateLists() {
     completedTasks.assignAll(allTasks.where((t) => t.status == "completed"));
-    inProgressTasks.assignAll(allTasks.where((t) => t.status == "inProgress"));
+    inProgressTasks.assignAll(allTasks.where((t) => t.status == "pending"));
     failedTasks.assignAll(allTasks.where((t) => t.status == "failed"));
   }
   // ************************** All Org Page fore **************************
@@ -613,12 +587,13 @@ class FormController extends GetxController {
   }
   // ************************** All Org Page Card Person **************************
 
-  final personOne = DataProfile(
-    orgname: "DataProfile",
+  var personOne = DataProfile(
+    orgname: "UNICEF",
     orglogo: "images/MyImage",
     fullName: 'Ahmed Youssef',
     id: "R-15897",
     task: "Food Assistance",
+    taskIcon: "",
     locationPersonProfile: "Al-Rimal District, Near Central Park",
     phoneNumber: "+963 934 555 123",
     totalMembers: 9,

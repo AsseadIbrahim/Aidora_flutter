@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      getPages: [GetPage(name: "/EEEEEEEE", page: () => Orgnavigationbar())],
+      getPages: [GetPage(name: "/home", page: () => Orgnavigationbar())],
     );
   }
 }

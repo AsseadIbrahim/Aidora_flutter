@@ -1,11 +1,47 @@
 import 'package:first_flutter/Controlers/homecontroller.dart';
 import 'package:first_flutter/Views/Org/OrgTwo/DataPerson.dart';
+import 'package:first_flutter/services/api_constants.dart';
+import 'package:first_flutter/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
+class Orgtwo extends StatefulWidget {
+  const Orgtwo({super.key});
+  @override
+  State<StatefulWidget> createState() => _Orgtwo();
+}
+
 // ignore: must_be_immutable
-class Orgtwo extends StatelessWidget {
-  Orgtwo({super.key});
+class _Orgtwo extends State<StatefulWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    var res = await ApiService.instance.get(
+      ApiConstants.orgPageTwo,
+      requiresAuth: true,
+    );
+    setState(() {
+      controller.listallpagetwo.assignAll(
+        res.data.map<Map<String, String>>((item) {
+          return {
+            "ID": item["id"].toString(),
+            "title": item["refugee_name"].toString(),
+            "id": item["request_id"].toString(),
+            "taskName": item["service_name"].toString(),
+            "icon": item["icon"].toString(),
+            "location": item["location"].toString(),
+            "date": item["request_date"].toString(),
+            "state": item["status"].toString(),
+          };
+        }).toList(),
+      );
+    });
+  }
+
   final FormController controller = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -41,11 +77,11 @@ class Orgtwo extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              Expanded(child: _buildTaskList("")),
-              Expanded(child: _buildTaskList("completed")),
-              Expanded(child: _buildTaskList("pending")),
-              Expanded(child: _buildTaskList("approved")),
-              Expanded(child: _buildTaskList("rejected")),
+              _buildTaskList(""),
+              _buildTaskList("completed"),
+              _buildTaskList("pending"),
+              _buildTaskList("approved"),
+              _buildTaskList("rejected"),
             ],
           ),
         ),
@@ -59,9 +95,9 @@ class Orgtwo extends StatelessWidget {
   Widget _buildTaskList(String s) {
     return Obx(() {
       return ListView.builder(
-        itemCount: controller.listallpagetwo.length,
+        itemCount: controller.listallpagetwo.value.length,
         itemBuilder: (context, index) {
-          var task = controller.listallpagetwo[index];
+          var task = controller.listallpagetwo.value[index];
           if (s.isEmpty) {
             return _taskItem(task, index);
           }
@@ -148,7 +184,10 @@ class Orgtwo extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: TextButton(
                   onPressed: () {
-                    Get.to(() => Dataperson());
+                    Get.to(
+                      () => Dataperson(),
+                      arguments: int.parse(task['ID']!),
+                    );
                   },
                   child: Container(
                     height: 50,

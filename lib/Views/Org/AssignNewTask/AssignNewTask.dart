@@ -16,6 +16,7 @@ class _Assignnewtask extends State<StatefulWidget> {
     super.initState();
     setState(() {
       route = Get.previousRoute;
+      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP :  ${route}");
     });
   }
 
@@ -68,65 +69,7 @@ class _Assignnewtask extends State<StatefulWidget> {
 
   // ========== قسم معلومات الطلب ==========
   Widget _buildRequestSection(FormController controller) {
-    if (route == "/Dataperson") {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'REQUEST: ${controller.requestId}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.blue,
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(
-                  controller.iconsMap[controller.logo]?.icon,
-                  size: 18,
-                  color: Colors.blue,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    controller.assistanceType,
-                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.location_on_outlined, size: 18, color: Colors.blue),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    controller.locations,
-                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    } else {
+    if (route == "/home") {
       return Obx(
         () => DropdownButton<String>(
           isExpanded: true,
@@ -185,6 +128,64 @@ class _Assignnewtask extends State<StatefulWidget> {
           onChanged: (value) {
             controller.valID.value = value!;
           },
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'REQUEST: ${controller.requestId}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+              ),
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(
+                  controller.iconsMap[controller.logo]?.icon,
+                  size: 18,
+                  color: Colors.blue,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    controller.assistanceType,
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.location_on_outlined, size: 18, color: Colors.blue),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    controller.locations,
+                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       );
     }

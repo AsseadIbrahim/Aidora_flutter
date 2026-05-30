@@ -58,11 +58,20 @@ class ApiConstants {
   static const String home = '/api/requests/volunteer/home/';
   static const String tasks = '/api/requests/volunteer/tasks/';
   static const String taskStatus = '/api/requests/volunteer/tasks/';
+  // ── Organization Page One ──────────────────────────────────────────────────
+  static const String orgPageOne = '/api/organizations/dashboard/';
+  static const String orgReport = '/api/organizations/tasks/';
+  // ── Organization Page Two ──────────────────────────────────────────────────
+  static const String orgPageTwo = '/api/requests/org/requests/';
+  static const String dataPerson = '/api/requests/org/requests/';
+  static const String dataPersonApproved = '/api/requests/org/requests/';
+  static const String dataPersonRejected = '/api/requests/org/requests/';
+  static const String toAssignnewtask = '';
+  // ── Organization Page Three ────────────────────────────────────────────────
+  static const String orgPageThree = '/api/organizations/tasks/';
+  static const String reAssign = '/api/organizations/tasks/';
   // ── Organization Page Fore ─────────────────────────────────────────────────
   static const String orgpagefore = '/api/organizations/applications/';
   static const String orgPageForeUpdateStatus =
       '/api/organizations/applications/';
-  // ── Organization Page One ──────────────────────────────────────────────────
-  static const String orgPageOne = '/api/organizations/dashboard/';
-  static const String orgReport = '/api/organizations/tasks/';
 }

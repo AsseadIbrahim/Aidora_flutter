@@ -1,5 +1,7 @@
 import 'package:first_flutter/Controlers/homecontroller.dart';
 import 'package:first_flutter/Views/Org/AssignNewTask/AssignNewTask.dart';
+import 'package:first_flutter/services/api_constants.dart';
+import 'package:first_flutter/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
@@ -11,8 +13,36 @@ class Dataperson extends StatefulWidget {
 }
 
 class _Dataperson extends State<StatefulWidget> {
+  final int id = Get.arguments;
+
   // حقن المتحكم
   final FormController controller = Get.find();
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    var res = await ApiService.instance.get(
+      "${ApiConstants.dataPerson}${id}",
+      requiresAuth: true,
+    );
+    setState(() {
+      controller.personOne.orgname = res.data['organization_name'];
+      controller.personOne.orglogo = '';
+      controller.personOne.fullName = res.data['refugee_name'];
+      controller.personOne.id = res.data['request_id'];
+      controller.personOne.task = res.data['service_name'];
+      controller.personOne.taskIcon = res.data['service_icon'];
+      controller.personOne.locationPersonProfile = res.data['location'];
+      controller.personOne.phoneNumber = res.data['phone_number'];
+      controller.personOne.totalMembers = res.data['family_members_count'];
+      controller.personOne.urgencyLevel = res.data['urgency_level'];
+      controller.personOne.description = res.data['description'];
+      controller.personOne.status = res.data['status'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +171,10 @@ class _Dataperson extends State<StatefulWidget> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image.network("")
+          Icon(
+            controller.iconsMap[controller.personOne.taskIcon]?.icon,
+            color: controller.iconsMap[controller.personOne.taskIcon]?.color,
+          ),
           const SizedBox(width: 8),
           Text(
             controller.personOne.task,
@@ -261,7 +294,7 @@ class _Dataperson extends State<StatefulWidget> {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -306,10 +339,12 @@ class _Dataperson extends State<StatefulWidget> {
     Color color,
   ) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(03),
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(10),
+        // ignore: deprecated_member_use
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
@@ -444,28 +479,38 @@ class _Dataperson extends State<StatefulWidget> {
                                     color: Colors.blue,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.to(() => Assignnewtask());
-                                      Get.close();
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.person_add_alt,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          "Assign Volunteer Now",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
+                                  child: Obx(
+                                    () => TextButton(
+                                      onPressed: () async {
+                                        controller.isLoading.value = true;
+                                        await ApiService.instance.post(
+                                          "${ApiConstants.dataPersonApproved}${id}/approve/",
+                                          body: {},
+                                          requiresAuth: true,
+                                        );
+                                        controller.isLoading.value = false;
+                                        Get.to(() => Assignnewtask());
+                                      },
+                                      child: controller.isLoading.value
+                                          ? CircularProgressIndicator()
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.person_add_alt,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  "Assign Volunteer Now",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -579,8 +624,9 @@ class _Dataperson extends State<StatefulWidget> {
                                     const SizedBox(height: 8),
                                     TextField(
                                       maxLines: 3,
-                                      onChanged:
-                                          controller.updateResonPersonOne,
+                                      onChanged: (value) {
+                                        controller.updateResonPersonOne(value);
+                                      },
                                       decoration: InputDecoration(
                                         hintText:
                                             "e.g., Missing documentation, incorrect\ndelivery coordinates, or items currently out\nof stock",
@@ -607,14 +653,29 @@ class _Dataperson extends State<StatefulWidget> {
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Confirm Rejection",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      ),
+                                  child: Obx(
+                                    () => TextButton(
+                                      onPressed: () async {
+                                        controller.isLoading.value = true;
+                                        await ApiService.instance.post(
+                                          "${ApiConstants.dataPersonRejected}${id}/reject/",
+                                          body: {
+                                            "rejection_reason":
+                                                controller.resonPersonOne.value,
+                                          },
+                                          requiresAuth: true,
+                                        );
+                                        controller.isLoading.value = false;
+                                      },
+                                      child: controller.isLoading.value
+                                          ? CircularProgressIndicator()
+                                          : Text(
+                                              "Confirm Rejection",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ),

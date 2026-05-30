@@ -39,14 +39,19 @@ class TokenManager {
       // Base64 decode payload
       var payload = parts[1];
       // Pad to valid base64 length
-      while (payload.length % 4 != 0) payload += '=';
+      while (payload.length % 4 != 0) {
+        payload += '=';
+      }
       final decoded = jsonDecode(utf8.decode(base64Url.decode(payload)));
       final exp = decoded['exp'] as int?;
       if (exp == null) return false;
       final expiresAt = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
       final remaining = expiresAt.difference(DateTime.now());
       final expiring = remaining.inSeconds < 60;
-      if (expiring) debugPrint('⏰ Token expires in ${remaining.inSeconds}s — refreshing...');
+      if (expiring)
+        debugPrint(
+          '⏰ Token expires in ${remaining.inSeconds}s — refreshing...',
+        );
       return expiring;
     } catch (_) {
       return false;
@@ -60,11 +65,13 @@ class TokenManager {
       final refresh = AuthStorage.getRefreshToken();
       if (refresh == null || refresh.isEmpty) return false;
 
-      final res = await http.post(
-        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tokenRefresh}'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'refresh': refresh}),
-      ).timeout(const Duration(seconds: 15));
+      final res = await http
+          .post(
+            Uri.parse('${ApiConstants.baseUrl}${ApiConstants.tokenRefresh}'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'refresh': refresh}),
+          )
+          .timeout(const Duration(seconds: 15));
 
       if (res.statusCode == 200) {
         final body = jsonDecode(res.body) as Map<String, dynamic>;

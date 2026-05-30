@@ -7,9 +7,13 @@ import 'package:get_x/get.dart';
 import 'package:first_flutter/Controlers/homecontroller.dart';
 // import 'package:http/http.dart';
 
-class Orgnavigationbar extends StatelessWidget {
-  Orgnavigationbar({super.key});
+class Orgnavigationbar extends StatefulWidget {
+  const Orgnavigationbar({super.key});
+  @override
+  State<StatefulWidget> createState() => _Orgnavigationbar();
+}
 
+class _Orgnavigationbar extends State<StatefulWidget> {
   final FormController controller = Get.put(FormController());
 
   @override

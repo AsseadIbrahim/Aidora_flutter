@@ -22,8 +22,9 @@ class AuthService {
       ApiConstants.login,
       body: {'email': email.trim(), 'password': password},
     );
-    if (!r.isSuccess)
+    if (!r.isSuccess) {
       return AuthResult.error(r.errorMessage ?? 'Login failed.');
+    }
     return _storeTokens(r.data, email);
   }
 
@@ -47,8 +48,9 @@ class AuthService {
         'accept_terms': acceptTerms,
       },
     );
-    if (!r.isSuccess)
+    if (!r.isSuccess) {
       return AuthResult.error(r.errorMessage ?? 'Registration failed.');
+    }
     // {"message": "Refugee account created"} → auto-login
     return login(email: email, password: password);
   }
