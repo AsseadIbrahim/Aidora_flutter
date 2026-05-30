@@ -1,10 +1,10 @@
-import 'package:first_flutter/Views/NavigationBar/AllTask.dart';
-import 'package:first_flutter/Views/NavigationBar/ProfilePage.dart';
-// import 'package:first_flutter/Models/NavigationBar/dddddd.dart';
+import 'package:Aidora/Views/NavigationBar/AllTask.dart';
+import 'package:Aidora/Views/NavigationBar/ProfilePage.dart';
+// import 'package:Aidora/Models/NavigationBar/dddddd.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
-import 'package:first_flutter/Views/NavigationBar/HomePage.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
+import 'package:Aidora/Views/NavigationBar/HomePage.dart';
 
 class Navigationbarr extends StatefulWidget {
   const Navigationbarr({super.key});

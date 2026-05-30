@@ -1,10 +1,10 @@
-import 'package:first_flutter/Views/NavigationBar/AllTask.dart';
-import 'package:first_flutter/services/api_constants.dart';
-import 'package:first_flutter/services/api_service.dart';
-import 'package:first_flutter/services/auth_storage.dart';
+import 'package:Aidora/Views/NavigationBar/AllTask.dart';
+import 'package:Aidora/services/api_constants.dart';
+import 'package:Aidora/services/api_service.dart';
+import 'package:Aidora/services/auth_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
 
 // ignore: must_be_immutable
 class Rejected extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:first_flutter/Controlers/homecontroller.dart';
-import 'package:first_flutter/Views/Org/OrgFore/Reject.dart';
-import 'package:first_flutter/Views/Org/OrgFore/Success.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
+import 'package:Aidora/Views/Org/OrgFore/Reject.dart';
+import 'package:Aidora/Views/Org/OrgFore/Success.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 

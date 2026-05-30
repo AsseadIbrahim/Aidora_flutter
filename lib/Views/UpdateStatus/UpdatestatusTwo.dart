@@ -1,7 +1,7 @@
-import 'package:first_flutter/Controlers/Controller_Two.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
-import 'package:first_flutter/services/api_constants.dart';
-import 'package:first_flutter/services/api_service.dart';
+import 'package:Aidora/Controlers/Controller_Two.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
+import 'package:Aidora/services/api_constants.dart';
+import 'package:Aidora/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 

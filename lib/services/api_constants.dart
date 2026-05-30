@@ -1,4 +1,4 @@
-import 'package:first_flutter/services/platform_helper_stub.dart';
+import 'package:Aidora/services/platform_helper_stub.dart';
 
 class ApiConstants {
   ApiConstants._();

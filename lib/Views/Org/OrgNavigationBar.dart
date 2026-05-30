@@ -1,10 +1,10 @@
-import 'package:first_flutter/Views/Org/OrgFore/OrgFore.dart';
-import 'package:first_flutter/Views/Org/OrgOne/OrgOne.dart';
-import 'package:first_flutter/Views/Org/OrgThree/OrgThree.dart';
-import 'package:first_flutter/Views/Org/OrgTwo/OrgTwo.dart';
+import 'package:Aidora/Views/Org/OrgFore/OrgFore.dart';
+import 'package:Aidora/Views/Org/OrgOne/OrgOne.dart';
+import 'package:Aidora/Views/Org/OrgThree/OrgThree.dart';
+import 'package:Aidora/Views/Org/OrgTwo/OrgTwo.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
 // import 'package:http/http.dart';
 
 class Orgnavigationbar extends StatefulWidget {

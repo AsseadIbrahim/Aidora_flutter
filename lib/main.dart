@@ -1,7 +1,7 @@
-import 'package:first_flutter/Controlers/homecontroller.dart';
-import 'package:first_flutter/Views/Org/OrgNavigationBar.dart';
-import 'package:first_flutter/services/auth_service.dart';
-import 'package:first_flutter/services/auth_storage.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
+import 'package:Aidora/Views/Org/OrgNavigationBar.dart';
+import 'package:Aidora/services/auth_service.dart';
+import 'package:Aidora/services/auth_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 

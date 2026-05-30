@@ -5,7 +5,7 @@ import 'package:pinput/pinput.dart';
 import 'package:smart_auth/smart_auth.dart';
 import 'package:get_x/get.dart';
 
-import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
 
 /// This is the basic usage of Pinput
 /// For more examples check out the demo directory

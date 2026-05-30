@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:first_flutter/Views/The_Form/Pageone.dart';
+import 'package:Aidora/Views/The_Form/Pageone.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});

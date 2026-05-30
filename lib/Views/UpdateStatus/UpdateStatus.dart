@@ -1,7 +1,7 @@
-import 'package:first_flutter/Views/UpdateStatus/UpdatestatusTwo.dart';
+import 'package:Aidora/Views/UpdateStatus/UpdatestatusTwo.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
-import 'package:first_flutter/Controlers/homecontroller.dart';
+import 'package:Aidora/Controlers/homecontroller.dart';
 
 // ignore: must_be_immutable
 class Updatestatus extends StatelessWidget {
