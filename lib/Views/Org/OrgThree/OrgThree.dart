@@ -1,5 +1,6 @@
 import 'package:Aidora/Controlers/homecontroller.dart';
 import 'package:Aidora/Views/Org/AssignNewTask/AssignNewTask.dart';
+import 'package:Aidora/Views/Org/AssignNewTask/add.dart';
 import 'package:Aidora/Views/Org/OrgOne/Report.dart';
 import 'package:Aidora/services/api_constants.dart';
 import 'package:Aidora/services/api_service.dart';
@@ -98,7 +99,7 @@ class _Orgthree extends State<StatefulWidget> {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    Get.to(() => Assignnewtask());
+                    Get.to(() => Add());
                   },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),

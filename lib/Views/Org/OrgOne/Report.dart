@@ -12,7 +12,7 @@ class Report extends StatefulWidget {
 }
 
 class _Report extends State<StatefulWidget> {
-  final int id = Get.arguments;
+  int id = Get.arguments;
 
   @override
   void initState() {
@@ -21,13 +21,18 @@ class _Report extends State<StatefulWidget> {
   }
 
   Future _init() async {
-    var res = await ApiService.instance.get(
-      "${ApiConstants.orgReport}${id}/report/",
-      requiresAuth: true,
-    );
-    setState(() {
-      controller.reportID.value = Map<String, Object>.from(res.data);
-    });
+    try {
+      var res = await ApiService.instance.get(
+        "${ApiConstants.orgReport}${id}/report/",
+        requiresAuth: true,
+      );
+      setState(() {
+        controller.reportID.value = Map<String, Object>.from(res.data);
+      });
+    } catch (e, s) {
+      print(e);
+      print(s);
+    }
   }
 
   // حقن المتحكم

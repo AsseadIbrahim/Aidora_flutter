@@ -5,14 +5,19 @@ import 'package:Aidora/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_x/get.dart';
 
-class Assignnewtask extends StatefulWidget {
-  const Assignnewtask({super.key});
+class Add extends StatefulWidget {
+  const Add({super.key});
+
   @override
-  State<StatefulWidget> createState() => _Assignnewtask();
+  State<StatefulWidget> createState() => _Add();
 }
 
-class _Assignnewtask extends State<StatefulWidget> {
-  int id = Get.arguments;
+class _Add extends State<StatefulWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   void dispose() {
@@ -21,29 +26,29 @@ class _Assignnewtask extends State<StatefulWidget> {
     controller.description.clear();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
   Future<void> _init() async {
     try {
       var res = await ApiService.instance.get(
-        "${ApiConstants.toAssignnewtask}$id/",
+        ApiConstants.add,
         requiresAuth: true,
       );
 
-      controller.requestId.value = res.data['id'];
-      controller.logo.value = res.data['service_icon']?.toString() ?? "";
-      controller.assistanceType.value =
-          res.data['service_name']?.toString() ?? "";
-      controller.locations.value = res.data['sector']?.toString() ?? "";
-      controller.volunt.clear();
+      controller.serviceRequests.clear();
       setState(() {
-        controller.volunt.assignAll(
+        controller.serviceRequests.assignAll(
+          (res.data['service_requests'] as List).map((e) {
+            return {
+              "id": e['id'],
+              "refugee_name": e['refugee_name'] ?? '',
+              "service_name": e['service_name'] ?? '',
+              "service_icon": e['service_icon'] ?? '',
+            };
+          }).toList(),
+        );
+        controller.volunteersAssign.clear();
+        controller.volunteersAssign.assignAll(
           (res.data['volunteers'] as List).map((e) {
-            return {"id": e['id'] ?? '', "fullname": e['full_name'] ?? ''};
+            return {"id": e['id'], "full_name": e['full_name'] ?? ''};
           }).toList(),
         );
       });
@@ -73,9 +78,11 @@ class _Assignnewtask extends State<StatefulWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // قسم: REQUEST معلومات
-            _buildRequestSection(),
+            _buildRequestServiceRequests(),
             const SizedBox(height: 24),
             _buildRequestVolunteer(),
+            const SizedBox(height: 20),
+
             // قسم: Task details
             _buildTaskDetailsSection(),
             const SizedBox(height: 32),
@@ -84,70 +91,69 @@ class _Assignnewtask extends State<StatefulWidget> {
           ],
         ),
       ),
-
-      // مؤشر تحميل يظهر فوق المحتوى عند الضغط على إنشاء
     );
   }
 
-  // ========== قسم معلومات الطلب ==========
-  Widget _buildRequestSection() {
+  Widget _buildRequestServiceRequests() {
     return Obx(
-      () => Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'REQUEST: R-${controller.requestId.value}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.blue,
+      () => DropdownButton<String>(
+        isExpanded: true,
+        itemHeight: null,
+        hint: Text("Select User"),
+        value: controller.serviceRequestsID.value.isEmpty
+            ? null
+            : controller.serviceRequestsID.value,
+
+        items: controller.serviceRequests.map((e) {
+          return DropdownMenuItem<String>(
+            value: e["id"].toString(),
+
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          e["refugee_name"].toString(),
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Text(
+                          e["id"].toString(),
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          controller.iconsMap[e["service_icon"]]?.icon,
+                          color: controller.iconsMap[e["service_icon"]]?.color,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          e["service_name"].toString(),
+                          style: TextStyle(color: Colors.grey, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(
-                  controller.iconsMap[controller.logo.value]?.icon,
-                  size: 18,
-                  color: Colors.blue,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    controller.assistanceType.value,
-                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.location_on_outlined, size: 18, color: Colors.blue),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    controller.locations.value,
-                    style: TextStyle(fontSize: 15, color: Colors.grey.shade800),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          );
+        }).toList(),
+        onChanged: (value) {
+          controller.serviceRequestsID.value = value!;
+        },
       ),
     );
   }
@@ -157,10 +163,12 @@ class _Assignnewtask extends State<StatefulWidget> {
       () => DropdownButton<String>(
         isExpanded: true,
         itemHeight: null,
-        hint: Text("Select User"),
-        value: controller.valID.value.isEmpty ? null : controller.valID.value,
+        hint: Text("Select Volunteer"),
+        value: controller.volunteersAssignID.value.isEmpty
+            ? null
+            : controller.volunteersAssignID.value,
 
-        items: controller.volunt.map((e) {
+        items: controller.volunteersAssign.map((e) {
           return DropdownMenuItem<String>(
             value: e["id"].toString(),
 
@@ -173,7 +181,7 @@ class _Assignnewtask extends State<StatefulWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      e["fullname"].toString(),
+                      e["full_name"].toString(),
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -181,7 +189,7 @@ class _Assignnewtask extends State<StatefulWidget> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "R-${e["id"].toString()}",
+                      e["id"].toString(),
                       style: TextStyle(color: Colors.grey, fontSize: 18),
                     ),
                   ],
@@ -191,7 +199,7 @@ class _Assignnewtask extends State<StatefulWidget> {
           );
         }).toList(),
         onChanged: (value) {
-          controller.valID.value = value!;
+          controller.volunteersAssignID.value = value!;
         },
       ),
     );
@@ -261,10 +269,15 @@ class _Assignnewtask extends State<StatefulWidget> {
             onPressed: () async {
               controller.isLoading.value = true;
               await ApiService.instance.post(
-                "${ApiConstants.toAssignnewtask}$id/",
+                ApiConstants.add,
                 requiresAuth: true,
                 body: {
-                  "volunteer_id": int.parse(controller.valID.value),
+                  "service_request_id": int.parse(
+                    controller.serviceRequestsID.value,
+                  ),
+                  "volunteer_id": int.parse(
+                    controller.volunteersAssignID.value,
+                  ),
                   "title": controller.taskTitle.text,
                   "instructions": controller.description.text,
                 },

@@ -66,7 +66,8 @@ class ApiConstants {
   static const String dataPerson = '/api/requests/org/requests/';
   static const String dataPersonApproved = '/api/requests/org/requests/';
   static const String dataPersonRejected = '/api/requests/org/requests/';
-  static const String toAssignnewtask = '';
+  static const String toAssignnewtask = '/api/organizations/assign-task/';
+  static const String add = '/api/organizations/assign-task/';
   // ── Organization Page Three ────────────────────────────────────────────────
   static const String orgPageThree = '/api/organizations/tasks/';
   static const String reAssign = '/api/organizations/tasks/';

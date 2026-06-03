@@ -13,7 +13,7 @@ class Dataperson extends StatefulWidget {
 }
 
 class _Dataperson extends State<StatefulWidget> {
-  final int id = Get.arguments;
+  int id = Get.arguments;
 
   // حقن المتحكم
   final FormController controller = Get.find();
@@ -413,333 +413,348 @@ class _Dataperson extends State<StatefulWidget> {
   }
 
   Widget _buildActionButtons(FormController controller) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.bottomSheet(
-                    barrierColor: Colors.transparent,
-                    backgroundColor: Colors.transparent,
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                      child: Container(
-                        height: 500,
-                        color: const Color.fromARGB(255, 197, 197, 197),
-                        child: Padding(
-                          padding: const EdgeInsets.all(13.0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 182, 252, 149),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.check_circle_outline_outlined,
-                                      size: 70,
-                                      color: const Color.fromARGB(
-                                        255,
-                                        26,
-                                        139,
-                                        30,
+    if (controller.personOne.status == "pending") {
+      return Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Get.bottomSheet(
+                      barrierColor: Colors.transparent,
+                      backgroundColor: Colors.transparent,
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        child: Container(
+                          height: 500,
+                          color: const Color.fromARGB(255, 197, 197, 197),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 90,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 182, 252, 149),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.check_circle_outline_outlined,
+                                        size: 70,
+                                        color: const Color.fromARGB(
+                                          255,
+                                          26,
+                                          139,
+                                          30,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  "Request Approved Successfully",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(height: 15),
+                                  Text(
+                                    "Request Approved Successfully",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  "${controller.personOne.fullName}'s request status has\n been updated to 'Approved'. You can\n now start assigning a volunteer for this \ntask",
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 30),
-                                Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(20),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    "${controller.personOne.fullName}'s request status has\n been updated to 'Approved'. You can\n now start assigning a volunteer for this \ntask",
+                                    textAlign: TextAlign.center,
                                   ),
-                                  child: Obx(
-                                    () => TextButton(
-                                      onPressed: () async {
-                                        controller.isLoading.value = true;
-                                        await ApiService.instance.post(
-                                          "${ApiConstants.dataPersonApproved}${id}/approve/",
-                                          body: {},
-                                          requiresAuth: true,
-                                        );
-                                        controller.isLoading.value = false;
-                                        Get.to(() => Assignnewtask());
-                                      },
-                                      child: controller.isLoading.value
-                                          ? CircularProgressIndicator()
-                                          : Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.person_add_alt,
-                                                  color: Colors.white,
-                                                ),
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Assign Volunteer Now",
-                                                  style: TextStyle(
-                                                    fontSize: 20,
+                                  SizedBox(height: 30),
+                                  Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Obx(
+                                      () => TextButton(
+                                        onPressed: () async {
+                                          controller.isLoading.value = true;
+                                          await ApiService.instance.post(
+                                            "${ApiConstants.dataPersonApproved}${id}/approve/",
+                                            body: {},
+                                            requiresAuth: true,
+                                          );
+
+                                          controller.isLoading.value = false;
+                                          Get.to(
+                                            () => Assignnewtask(),
+                                            arguments: id,
+                                          );
+                                        },
+                                        child: controller.isLoading.value
+                                            ? CircularProgressIndicator()
+                                            : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.person_add_alt,
                                                     color: Colors.white,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.close();
-                                    },
-                                    child: Text(
-                                      "Cancel",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.blue,
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    "Assign Volunteer Now",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 10),
+                                  Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.close();
+                                      },
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    elevation: 0,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.vertical(
-                        top: Radius.circular(24),
+                      elevation: 0,
+                      shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.vertical(
+                          top: Radius.circular(24),
+                        ),
                       ),
+                    );
+                  },
+                  icon: const Icon(Icons.check_circle, color: Colors.white),
+                  label: const Text('Approve'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade600,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  );
-                },
-                icon: const Icon(Icons.check_circle, color: Colors.white),
-                label: const Text('Approve'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade600,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Get.bottomSheet(
-                    barrierColor: Colors.transparent,
-                    backgroundColor: Colors.transparent,
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                      child: Container(
-                        height: 500,
-                        color: const Color.fromARGB(255, 197, 197, 197),
-                        child: Padding(
-                          padding: const EdgeInsets.all(13.0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 241, 133, 133),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.do_not_disturb_on_sharp,
-                                      size: 70,
-                                      color: Colors.red,
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Get.bottomSheet(
+                      barrierColor: Colors.transparent,
+                      backgroundColor: Colors.transparent,
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        child: Container(
+                          height: 500,
+                          color: const Color.fromARGB(255, 197, 197, 197),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 90,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 241, 133, 133),
+                                      borderRadius: BorderRadius.circular(50),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-                                Text(
-                                  "Reject Request?",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Please provide a reason for rejecting this \n humanitarian aid request. This Will be shared\nwith the requester.",
-                                ),
-                                SizedBox(height: 15),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'REJECTION REASON (REQUIREQ)',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.do_not_disturb_on_sharp,
+                                        size: 70,
+                                        color: Colors.red,
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
-                                    TextField(
-                                      maxLines: 3,
-                                      onChanged: (value) {
-                                        controller.updateResonPersonOne(value);
-                                      },
-                                      decoration: InputDecoration(
-                                        hintText:
-                                            "e.g., Missing documentation, incorrect\ndelivery coordinates, or items currently out\nof stock",
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
+                                  ),
+                                  SizedBox(height: 15),
+                                  Text(
+                                    "Reject Request?",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Please provide a reason for rejecting this \n humanitarian aid request. This Will be shared\nwith the requester.",
+                                  ),
+                                  SizedBox(height: 15),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'REJECTION REASON (REQUIREQ)',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      TextField(
+                                        maxLines: 3,
+                                        onChanged: (value) {
+                                          controller.updateResonPersonOne(
+                                            value,
+                                          );
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText:
+                                              "e.g., Missing documentation, incorrect\ndelivery coordinates, or items currently out\nof stock",
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding: const EdgeInsets.all(
+                                            16,
                                           ),
                                         ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: const EdgeInsets.all(
-                                          16,
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 30),
+                                  Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Obx(
+                                      () => TextButton(
+                                        onPressed: () async {
+                                          controller.isLoading.value = true;
+                                          await ApiService.instance.post(
+                                            "${ApiConstants.dataPersonRejected}${id}/reject/",
+                                            body: {
+                                              "rejection_reason": controller
+                                                  .resonPersonOne
+                                                  .value,
+                                            },
+                                            requiresAuth: true,
+                                          );
+                                          controller.isLoading.value = false;
+                                        },
+                                        child: controller.isLoading.value
+                                            ? CircularProgressIndicator()
+                                            : Text(
+                                                "Confirm Rejection",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    height: 50,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        194,
+                                        194,
+                                        194,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.close();
+                                      },
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 30),
-                                Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Obx(
-                                    () => TextButton(
-                                      onPressed: () async {
-                                        controller.isLoading.value = true;
-                                        await ApiService.instance.post(
-                                          "${ApiConstants.dataPersonRejected}${id}/reject/",
-                                          body: {
-                                            "rejection_reason":
-                                                controller.resonPersonOne.value,
-                                          },
-                                          requiresAuth: true,
-                                        );
-                                        controller.isLoading.value = false;
-                                      },
-                                      child: controller.isLoading.value
-                                          ? CircularProgressIndicator()
-                                          : Text(
-                                              "Confirm Rejection",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Container(
-                                  height: 50,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                      255,
-                                      194,
-                                      194,
-                                      194,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.close();
-                                    },
-                                    child: Text(
-                                      "Cancel",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
+                      elevation: 0,
+                    );
+                  },
+                  icon: const Icon(Icons.cancel, color: Colors.white),
+                  label: const Text('Reject'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade600,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    elevation: 0,
-                  );
-                },
-                icon: const Icon(Icons.cancel, color: Colors.white),
-                label: const Text('Reject'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade600,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.person_add, color: Colors.blue),
-              SizedBox(width: 10),
-              Text("Assign to volunteer", style: TextStyle(color: Colors.blue)),
             ],
           ),
-        ),
-      ],
-    );
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.person_add, color: Colors.blue),
+                SizedBox(width: 10),
+                Text(
+                  "Assign to volunteer",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }

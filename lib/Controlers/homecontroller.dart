@@ -173,6 +173,8 @@ class FormController extends GetxController {
     // five
     phoneNumberEmergency.dispose();
     volunteer.dispose();
+    taskTitle.dispose();
+    description.dispose();
     super.onClose();
   }
 
@@ -612,38 +614,43 @@ class FormController extends GetxController {
   void updateResonPersonOne(String reason) {
     resonPersonOne.value = reason;
   }
+
   //  ////////////////////////// Assign New Task  ////////////////////
 
   // بيانات ثابتة للعرض (يمكن جلبها من API)
-  final String requestId = 'R-15897';
-  final String logo = "restaurant";
-  final String assistanceType = 'Food assistance';
-  final String locations = 'Homs-Al-Waer';
-  final String taskTitle = 'Delivery of food basket to R-15897';
-  final String description =
-      'Deliver the monthly food basket to the registered address. '
-      'Ensure cultural sensitivity during the interaction and confirm identity upon arrival.';
-
-  // حالة حقل البحث
-  String searchQuery = '';
-
-  // دالة تحديث البحث
-  void updateSearch(String value) {
-    searchQuery = value;
-    update(); // تحديث واجهة GetBuilder
-  }
-  //  ////////////////////////// Success  Task ////////////////////
-
-  // بيانات المهمة (يمكن جلبها من وسيط أو API)
-  final String taskTitleSuccess = 'Community Garden Mulching';
-  final String taskDate = 'Oct 24, 2023';
-  final String taskTime = '9:00 AM';
-  /////////////////////////////// ماب التحويل ///////////////////////////////
-  List x = [
-    {'title': 'assead', 'icon': 'Home'},
-    {'title': 'ali', 'icon': 'Settings'},
-    {'title': 'ahmad', 'icon': 'Add'},
+  var requestId = 0.obs;
+  var logo = "restaurant".obs;
+  var assistanceType = 'Food assistance'.obs;
+  var locations = 'Homs-Al-Waer'.obs;
+  List volunt = [
+    {"id": 1, "fullname": "ali"},
+    {"id": 2, "fullname": "ali"},
   ];
+  var taskTitle = TextEditingController();
+  var description = TextEditingController();
+
+  var serviceRequestsID = "".obs;
+  List serviceRequests = [
+    {
+      "id": 1,
+      "refugee_name": "ali",
+      "service_name": "food",
+      "service_icon": "water",
+    },
+    {
+      "id": 2,
+      "refugee_name": "ahmad",
+      "service_name": "Sanitation",
+      "service_icon": "drop",
+    },
+  ];
+  var volunteersAssignID = "".obs;
+  List volunteersAssign = [
+    {"id": 3, "full_name": "magd"},
+    {"id": 9, "full_name": "maher"},
+  ];
+
+  /////////////////////////////// ماب التحويل ///////////////////////////////
   Map<String, IconConfig> iconsMap = {
     "emergency": IconConfig(Icons.emergency, Color(0xff15a3da)),
     "sos": IconConfig(Icons.sos, Colors.red),
